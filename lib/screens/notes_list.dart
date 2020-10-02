@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_app/models/note.dart';
 import 'package:notes_app/utils/database_helper.dart';
@@ -27,6 +28,16 @@ class NoteListState extends State<NoteList> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Notes'),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.brightness_medium_sharp),
+              onPressed: () {
+                DynamicTheme.of(context).setBrightness(
+                    Theme.of(context).brightness == Brightness.dark
+                        ? Brightness.light
+                        : Brightness.dark);
+              })
+        ],
       ),
       body: getNoteListView(),
       floatingActionButton: FloatingActionButton(
@@ -47,7 +58,6 @@ class NoteListState extends State<NoteList> {
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
         return Card(
-          color: Colors.white,
           elevation: 2.0,
           child: ListTile(
             leading: CircleAvatar(
@@ -126,10 +136,8 @@ class NoteListState extends State<NoteList> {
     bool result =
         await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return NoteDetail(note, title);
-    }
-    )
-    );
-  
+    }));
+
     if (result == true) {
       updateListView();
     }
